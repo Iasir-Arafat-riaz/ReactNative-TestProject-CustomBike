@@ -1,11 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
-// import Text from './components/text';
-import { colors } from './theme/colors';
-import { spacing } from './theme/spacing';
-import Text from "./components/text"
+
 import { useFonts } from 'expo-font';
 import { typography } from './theme/typography';
+import { NavigationContainer,DarkTheme  } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Home from './screens/Home';
+import Details from './screens/Details';
+
+const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -15,18 +19,24 @@ export default function App() {
   });
   const {primary,primaryBold,bold}=typography;
   return (
-    <View style={styles.container}>
-      <Text style={{fontFamily:bold}}>components</Text>
-      <Text style={{paddingTop:spacing[4],}}>gg</Text>
-      <StatusBar style="auto" />
-    </View>
+    
+    <>
+    <NavigationContainer >
+      <Stack.Navigator screenOptions={{headerShown:false }}>
+      
+        <Stack.Screen   name="Home" component={Home} />
+        <Stack.Screen  name="Details" component={Details} />
+      </Stack.Navigator>
+    </NavigationContainer>
+    <StatusBar style="light"/>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
+    
     alignItems: 'center',
     justifyContent: 'center',
   },
