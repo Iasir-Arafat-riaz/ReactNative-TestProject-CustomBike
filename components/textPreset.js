@@ -23,6 +23,7 @@ export const TextPresets={
     h1:{...Bold,fontSize:32},
     h2:{...Bold,fontSize:28},
     h3:{...Bold,fontSize:24},
-    h4:{...Bold,fontSize:14},
+    h4:{...Bold,fontSize:18},
+    h5:{...Bold,fontSize:14},
     small:{...Bold,fontSize:12}
 }

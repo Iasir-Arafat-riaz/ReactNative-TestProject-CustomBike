@@ -1,8 +1,10 @@
 import {
   FlatList,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
+  TextInput,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -13,14 +15,21 @@ import { colors } from "../theme/colors";
 import { PLANET_LIST } from "../data/planetList";
 import { spacing } from "../theme/spacing";
 import { AntDesign } from "@expo/vector-icons";
-export const SingleItem = ({ navigation, model }) => {
+export const SingleItem = ({ navigation, item }) => {
+  const { model, image } = item;
   return (
     <Pressable
-      onPress={() => navigation.navigate("Details")}
+      onPress={() => navigation.navigate("Details", { single: item })}
       style={styles.item}
     >
       <View style={styles.firstItemDiv}>
-        <View style={styles.circle} />
+        {/* <View style={styles.circle} /> */}
+        <View>
+          <Image
+            source={{ uri: image, width: 30, height: 30 }}
+            style={{ borderRadius: 15 }}
+          />
+        </View>
         <Text preset="h4" style={styles.itemName}>
           {model}
         </Text>
@@ -34,13 +43,16 @@ export const SingleItem = ({ navigation, model }) => {
 
 export default function Home({ navigation }) {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const getMovies = async () => {
     try {
+      setLoading(true);
       const response = await fetch(
         "https://serene-chamber-45441.herokuapp.com/products"
       );
       const json = await response.json();
       setData(json);
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -51,18 +63,29 @@ export default function Home({ navigation }) {
   }, []);
   const renderItem = ({ item }) => {
     const { model } = item;
-    return <SingleItem navigation={navigation} model={model} />;
+    return <SingleItem navigation={navigation} item={item} />;
   };
   return (
     <SafeAreaView style={styles.container}>
       <GalaxyHeader></GalaxyHeader>
-      <FlatList
-        contentContainerStyle={styles.list}
-        data={data}
-        keyExtractor={(item) => item._id}
-        renderItem={renderItem}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
+      <TextInput
+        style={styles.textInput}
+        placeholder="Type Model Name"
+        placeholderTextColor={colors.gray}
       />
+      {loading ? (
+        <Text preset="h2" style={styles.loading}>
+          Data Loading...
+        </Text>
+      ) : (
+        <FlatList
+          contentContainerStyle={styles.list}
+          data={data}
+          keyExtractor={(item) => item._id}
+          renderItem={renderItem}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -100,5 +123,16 @@ const styles = StyleSheet.create({
   separator: {
     borderBottomColor: colors.white,
     borderWidth: 0.2,
+  },
+  textInput: {
+    padding: spacing[5],
+    borderBottomWidth: 1,
+    borderBottomColor: "white",
+    marginHorizontal: 20,
+    color: "white",
+  },
+  loading: {
+    margin: 20,
+    textAlign: "center",
   },
 });
