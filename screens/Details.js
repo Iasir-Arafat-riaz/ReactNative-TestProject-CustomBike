@@ -26,7 +26,7 @@ export default function Details({ navigation, route }) {
         </View>
         <View style={styles.details}>
           <Text preset="h3">{model}</Text>
-          <Text preset="h5">{detail}</Text>
+          <Text preset="baseBold">{detail}</Text>
         </View>
         <Pressable style={styles?.link} onPress={() => Linking.openURL(link)}>
           <Text>Source :</Text>
