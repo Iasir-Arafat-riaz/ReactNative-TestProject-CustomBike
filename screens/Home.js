@@ -43,7 +43,9 @@ export const SingleItem = ({ navigation, item }) => {
 
 export default function Home({ navigation }) {
   const [data, setData] = useState([]);
+  const[itemData,setItemData]=useState([])
   const [loading, setLoading] = useState(true);
+  
   const getMovies = async () => {
     try {
       setLoading(true);
@@ -52,17 +54,36 @@ export default function Home({ navigation }) {
       );
       const json = await response.json();
       setData(json);
+      setItemData(json)
       setLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
+ 
 
   useEffect(() => {
     getMovies();
   }, []);
+
+//searchFilter function for input field
+const searchFilter=(text)=>{
+  // console.log(text)
+  
+  const modelName = data.filter(singleData=>{
+    const textTyped = text.toLowerCase();
+    const itemModelName= singleData.model.toLowerCase()
+  return itemModelName.indexOf(textTyped)>-1  
+  
+  })
+ 
+setData(modelName) 
+
+
+}
+
   const renderItem = ({ item }) => {
-    const { model } = item;
+    
     return <SingleItem navigation={navigation} item={item} />;
   };
   return (
@@ -72,6 +93,7 @@ export default function Home({ navigation }) {
         style={styles.textInput}
         placeholder="Type Model Name"
         placeholderTextColor={colors.gray}
+        onChangeText={(text)=>searchFilter(text)}
       />
       {loading ? (
         <Text preset="h2" style={styles.loading}>
