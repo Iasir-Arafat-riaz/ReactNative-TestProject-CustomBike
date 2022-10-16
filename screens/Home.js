@@ -54,7 +54,7 @@ export default function Home({ navigation }) {
       );
       const json = await response.json();
       setData(json);
-      setItemData(json)
+      // setItemData(json)
       setLoading(false);
     } catch (error) {
       console.error(error);
